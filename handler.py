@@ -5,7 +5,7 @@ from flask import Flask, request, Response
 from healthinsurance.Insurance import HealthInsurance
 
 # loading model
-model = pickle.load( open( 'C:\\Users\\Codo\\Desktop\\repos\\shield_insurance\\models', 'rb' ) )
+model = pickle.load( open( 'models/lgbm_tuned.pkl', 'rb' ) )
 
 # initialize API
 app = Flask( __name__ )
