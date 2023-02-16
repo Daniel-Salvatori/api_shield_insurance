@@ -5,12 +5,12 @@ from flask import Flask, request, Response
 from healthinsurance.Insurance import HealthInsurance
 
 # loading model
-model = pickle.load( open( 'models/lgbm_tuned.pkl', 'rb' ) )
+model = pickle.load( open( 'C:\\Users\\Codo\\Desktop\\repos\\shield_insurance\\models', 'rb' ) )
 
 # initialize API
 app = Flask( __name__ )
 
-@app.route( '/heathinsurance/predict', methods=['POST'] )
+@app.route( '/healthinsurance/predict', methods=['POST'] )
 def healthinsurance_predict():
     test_json = request.get_json()
     
