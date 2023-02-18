@@ -48,7 +48,7 @@ class HealthInsurance:
         df5.loc[:, 'gender'] = df5['gender'].map( self.target_encode_gender_scaler )
         
         # r_code -  Frequency Enconding / Target Enconding
-        df5.loc[:, 'region_code'] = df5['region_code'].map( self.target_encode_gender_scaler )
+        df5.loc[:, 'region_code'] = df5['region_code'].map( self.target_encode_region_code_scaler )
         
         # vehicle_age - One Hot Enconding / Frequency Enconding 
         df5 = pd.get_dummies( df5, prefix='vehicle_age', columns=['vehicle_age'] )
@@ -67,8 +67,8 @@ class HealthInsurance:
         pred = model.predict_proba( test_data )
         
         # join prediction into original data
-        original_data['prediction'] = pred[:, 1]
-        original_data = original_data.sort_values('prediction', ascending=False)
+        original_data['score'] = pred[:, 1]
+        original_data = original_data.sort_values('score', ascending=False)
         
         return original_data.to_json( orient='records', date_format='iso' )
 
