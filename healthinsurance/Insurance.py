@@ -8,7 +8,6 @@ class HealthInsurance:
         self.annual_premium_scaler = pickle.load(open( 'features/annual_premium_scaler.pkl', 'rb') )
         self.age_scaler = pickle.load(open( 'features/age_scaler.pkl', 'rb') )
         self.vintage_scaler = pickle.load(open('features/vintage_scaler.pkl', 'rb') )
-        self.target_encode_gender_scaler = pickle.load( open( 'features/target_encode_gender_scaler.pkl', 'rb') )
         self.target_encode_region_code_scaler = pickle.load( open( 'features/target_encode_region_code_scaler.pkl', 'rb') )
         self.fe_policy_sales_channel_scaler = pickle.load( open( 'features/fe_policy_sales_channel_scaler.pkl', 'rb') ) 
 
@@ -45,7 +44,7 @@ class HealthInsurance:
         df5['vintage'] = self.vintage_scaler.transform( df5[['vintage']].values )
         
         # gender - One Hot Encoding / Target Enconding
-        df5.loc[:, 'gender'] = df5['gender'].map( self.target_encode_gender_scaler )
+        df5 = pd.get_dummies(df5, prefix='gender',columns=['gender'])
         
         # r_code -  Frequency Enconding / Target Enconding
         df5.loc[:, 'region_code'] = df5['region_code'].map( self.target_encode_region_code_scaler )
@@ -59,6 +58,8 @@ class HealthInsurance:
         # Feature Selection
         cols_selected = ['annual_premium', 'vintage', 'age', 'region_code', 'vehicle_damage', 'previously_insured',
                          'policy_sales_channel']
+        
+        df5 = df5.fillna(0)
 
         return df5[ cols_selected ]
 
@@ -68,7 +69,7 @@ class HealthInsurance:
         
         # join prediction into original data
         original_data['score'] = pred[:, 1]
-        original_data = original_data.sort_values('score', ascending=False)
+        #original_data = original_data.sort_values('score', ascending=False)
         
         return original_data.to_json( orient='records', date_format='iso' )
 
